@@ -23,9 +23,9 @@ public class CsvToSql {
         String password = "your_password";
 
         // Connection URLs for three MySQL instances
-        String url1 = "jdbc:mysql://crimedata1.czk6okwo4kzv.us-west-1.rds.amazonaws.com:3306/CrimeData";
-        String url2 = "jdbc:mysql://crimedata2.czk6okwo4kzv.us-west-1.rds.amazonaws.com:3306/CrimeData";
-        String url3 = "jdbc:mysql://crimedata3.czk6okwo4kzv.us-west-1.rds.amazonaws.com:3306/CrimeData";
+        String url1 = "jdbc:mysql://{url}:3306/CrimeData";
+        String url2 = "jdbc:mysql://{url}:3306/CrimeData";
+        String url3 = "jdbc:mysql://{url}:3306/CrimeData";
 
         String csvFilePath = "E:\\SchoolWork\\DSCI551\\Project\\Crime_Data_from_2020_to_Present.csv";
 
