@@ -4,10 +4,31 @@
 This project contains a Java application (`CsvToSql.java`) that reads data from a CSV file and inserts it into a MySQL database using JDBC. The application distributes data entries across three different database instances based on the modulus of an ID field.
 
 ## Prerequisites
-- Java JDK 8 or later.
-- MySQL Server (Three instances configured for this project).
+- Java JDK 17.
+- MySQL Server (three instances configured for this project).
 - IntelliJ IDEA (Community or Ultimate version).
-- CSV file containing the data to be imported.
+- opencsv library.
+- MySQL JDBC Driver.
+
+## Project Structure
+LACrimeMap/
+│
+├── .gradle/ # Gradle files (automatically generated)
+├── .idea/ # IntelliJ project files
+├── build/ # Compiled code and other build artifacts
+├── gradle/ # Gradle wrapper scripts
+├── src/
+│ ├── main/
+│ │ ├── java/
+│ │ │ └── CsvToSql.java
+│ │ │ └── MultipleMySQLConnections.java
+│ │ └── resources/ # Resources for the project, such as configurations
+│ └── test/ # Test source directory (empty in this structure)
+├── .gitignore # Specifies intentionally untracked files to ignore
+├── Crime_Data_from_2020_to_Present.csv # CSV file with crime data
+├── gradlew # Gradle wrapper executable script (Unix)
+├── gradlew.bat # Gradle wrapper executable script (Windows)
+└── settings.gradle # Gradle settings file
 
 ## Project Setup
 1. **Clone the Repository:**
