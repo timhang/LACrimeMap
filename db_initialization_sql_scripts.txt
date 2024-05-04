@@ -1,0 +1,27 @@
+CREATE DATABASE CrimeData;
+USE CrimeData;
+DROP TABLE IF EXISTS CrimeData;
+CREATE TABLE CrimeData (
+    DR_NO VARCHAR(20) PRIMARY KEY,
+    Date_Rptd DATETIME,
+    DATE_OCC DATETIME,
+    TIME_OCC INT,
+    AREA INT,
+    AREA_NAME TEXT,
+    Rpt_Dist_No TEXT,
+    Crm_Cd TEXT,
+    Crm_Cd_Desc TEXT,
+    Vict_Age INT,
+    Vict_Sex TEXT,
+    Vict_Descent TEXT,
+    Premis_Cd INT,
+    Premis_Desc TEXT,
+    Weapon_Used_Cd TEXT,
+    Weapon_Desc TEXT,
+    Status TEXT,
+    Status_Desc TEXT,
+    LOCATION TEXT,
+    Cross_Street TEXT,
+    LAT FLOAT(10,6),
+    LON FLOAT(10,6)
+);
