@@ -23,11 +23,11 @@ public class CsvToSql {
         String password = "your_password";
 
         // Connection URLs for three MySQL instances
-        String url1 = "jdbc:mysql://localhost:3306/CrimeData";
-        String url2 = "jdbc:mysql://localhost:3307/CrimeData";
-        String url3 = "jdbc:mysql://localhost:3308/CrimeData";
+        String url1 = "jdbc:mysql://crimedata1.czk6okwo4kzv.us-west-1.rds.amazonaws.com:3306/CrimeData";
+        String url2 = "jdbc:mysql://crimedata2.czk6okwo4kzv.us-west-1.rds.amazonaws.com:3306/CrimeData";
+        String url3 = "jdbc:mysql://crimedata3.czk6okwo4kzv.us-west-1.rds.amazonaws.com:3306/CrimeData";
 
-        String csvFilePath = "E:\\SchoolWork\\DSCI551\\Project\\Crime_Data_from_2010_to_2019.csv";
+        String csvFilePath = "E:\\SchoolWork\\DSCI551\\Project\\Crime_Data_from_2020_to_Present.csv";
 
         SimpleDateFormat csvDateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss a");
 
@@ -44,7 +44,8 @@ public class CsvToSql {
             //while (count <= 100) {
 //                count++;
                 // nextLine = reader.readNext();
-                int dbIndex = Math.abs(nextLine[0].hashCode()) % 3;
+                int dbIndex = Integer.parseInt(nextLine[0]) % 3;
+
                 System.out.println("insert into db: " + dbIndex);
 //                for (String e : nextLine) {
 //
@@ -52,7 +53,7 @@ public class CsvToSql {
 //                }
                 // Try-with-resources to automatically close connections after use
 
-                    System.out.println("Connected to database 2");
+                    System.out.println("Connected to database " + dbIndex);
                     String sql = "INSERT INTO CrimeData (\n" +
                         "            DR_NO, Date_Rptd, DATE_OCC, TIME_OCC, AREA, AREA_NAME, Rpt_Dist_No, Crm_Cd, Crm_Cd_Desc, Vict_Age, Vict_Sex, Vict_Descent, Premis_Cd, Premis_Desc, Weapon_Used_Cd, Weapon_Desc, Status, Status_Desc, LOCATION, Cross_Street, LAT, LON\n" +
                         "        ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
