@@ -13,21 +13,37 @@ This project contains a Java application (`CsvToSql.java`) that reads data from 
 ## Project Structure
 LACrimeMap/
 │
+
 ├── .gradle/ # Gradle files (automatically generated)
+
 ├── .idea/ # IntelliJ project files
+
 ├── build/ # Compiled code and other build artifacts
+
 ├── gradle/ # Gradle wrapper scripts
+
 ├── src/
+
 │ ├── main/
+
 │ │ ├── java/
+
 │ │ │ └── CsvToSql.java
+
 │ │ │ └── MultipleMySQLConnections.java
+
 │ │ └── resources/ # Resources for the project, such as configurations
+
 │ └── test/ # Test source directory (empty in this structure)
+
 ├── .gitignore # Specifies intentionally untracked files to ignore
+
 ├── Crime_Data_from_2020_to_Present.csv # CSV file with crime data
+
 ├── gradlew # Gradle wrapper executable script (Unix)
+
 ├── gradlew.bat # Gradle wrapper executable script (Windows)
+
 └── settings.gradle # Gradle settings file
 
 ## Project Setup
