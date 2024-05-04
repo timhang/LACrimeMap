@@ -1,0 +1,133 @@
+dependencies {
+    // Other dependencies
+
+    // OpenCSV library
+    implementation 'com.opencsv:opencsv:5.6' // Use the latest version available
+
+    // SQL Server JDBC Driver
+    implementation 'com.microsoft.sqlserver:mssql-jdbc:9.4.1.jre8' // Use the appropriate version for your JRE
+}
+
+dependencies {
+    implementation 'com.opencsv:opencsv:5.6'
+    implementation 'mysql:mysql-connector-java:8.0.23'
+}
+
+
+Yes, Docker can run multiple instances of the MySQL server. Each instance will run in its own container with its own environment and set of configurations. To run multiple MySQL instances, you will have to create separate containers for each instance, specifying a unique name, port mapping, and volume storage for each one so that they don't conflict with each other.
+
+Here's how you can run multiple MySQL server instances on Docker:
+
+1. Pull the MySQL Image: If you haven't already pulled the MySQL image from Docker Hub, do so with the following command:
+
+docker pull mysql
+
+2. Run Multiple MySQL Containers: Use the docker run command to create and run MySQL containers. You'll need to specify different container names, port mappings, and volume storage paths for each one.
+
+Here's an example of running two MySQL server instances:
+
+docker run --name crimedata1 -e MYSQL_ROOT_PASSWORD=crimedata1 -p 3306:3306 -d mysql:latest
+docker run --name crimedata2 -e MYSQL_ROOT_PASSWORD=crimedata2 -p 3307:3306 -d mysql:latest
+docker run --name crimedata3 -e MYSQL_ROOT_PASSWORD=crimedata3 -p 3308:3306 -d mysql:latest
+docker run --name crimedata4 -e MYSQL_ROOT_PASSWORD=crimedata4 -p 3309:3306 -d mysql:latest
+
+In this example:
+
+--name gives a name to your container (e.g., mysql1 and mysql2).
+-e sets environment variables inside the container (e.g., MYSQL_ROOT_PASSWORD).
+-p maps a port on your host to a port on the container (e.g., host 3306 to container 3306 for the first instance, and host 3307 to container 3306 for the second instance).
+-d runs the container in detached mode.
+mysql:latest specifies the image to use, which is the latest MySQL image from Docker Hub.
+
+3. Persistent Storage: If you want each MySQL instance to have its own persistent storage, you can specify a volume for each container:
+
+docker run --name mysql1 -e MYSQL_ROOT_PASSWORD=my-secret-pw -p 3306:3306 -v /my/own/datadir1:/var/lib/mysql -d mysql:latest
+docker run --name mysql2 -e MYSQL_ROOT_PASSWORD=my-secret-pw -p 3307:3306 -v /my/own/datadir2:/var/lib/mysql -d mysql:latest
+
+Replace /my/own/datadir1 and /my/own/datadir2 with the paths to directories on your host machine where you want to store each instance's data persistently.
+
+Remember that running multiple instances of MySQL on the same host can consume significant memory and CPU resources, so ensure your host machine has sufficient resources to handle this.
+
+CREATE DATABASE CrimeData;
+USE CrimeData;
+DROP TABLE IF EXISTS CrimeData;
+CREATE TABLE CrimeData (
+    DR_NO VARCHAR(20) PRIMARY KEY,
+    Date_Rptd DATETIME,
+    DATE_OCC DATETIME,
+    TIME_OCC INT,
+    AREA INT,
+    AREA_NAME VARCHAR(50),
+    Rpt_Dist_No INT,
+    Part_1_2 INT,
+    Crm_Cd INT,
+    Crm_Cd_Desc VARCHAR(100),
+    Mocodes VARCHAR(50),
+    Vict_Age INT,
+    Vict_Sex CHAR(1),
+    Vict_Descent CHAR(1),
+    Premis_Cd INT,
+    Premis_Desc VARCHAR(100),
+    Weapon_Used_Cd INT,
+    Weapon_Desc VARCHAR(100),
+    Status CHAR(2),
+    Status_Desc VARCHAR(50),
+    Crm_Cd_1 INT,
+    Crm_Cd_2 INT,
+    Crm_Cd_3 INT,
+    Crm_Cd_4 INT,
+    LOCATION VARCHAR(100),
+    Cross_Street VARCHAR(100),
+    LAT FLOAT(10,6),
+    LON FLOAT(10,6)
+);
+
+DROP TABLE IF EXISTS CrimeData;
+CREATE TABLE CrimeData (
+    DR_NO VARCHAR(20) PRIMARY KEY,
+    Date_Rptd DATETIME,
+    DATE_OCC DATETIME,
+    TIME_OCC INT,
+    AREA INT,
+    AREA_NAME TEXT,
+    Rpt_Dist_No TEXT,
+    Crm_Cd TEXT,
+    Crm_Cd_Desc TEXT,
+    Vict_Age INT,
+    Vict_Sex TEXT,
+    Vict_Descent TEXT,
+    Premis_Cd INT,
+    Premis_Desc TEXT,
+    Weapon_Used_Cd TEXT,
+    Weapon_Desc TEXT,
+    Status TEXT,
+    Status_Desc TEXT,
+    LOCATION TEXT,
+    Cross_Street TEXT,
+    LAT FLOAT(10,6),
+    LON FLOAT(10,6)
+);
+
+SELECT * FROM CrimeData;
+
+DROP TABLE CrimeLocations;
+CREATE TABLE CrimeLocations (
+    DR_NO VARCHAR(20) PRIMARY KEY,
+    GeoLocation POINT NOT NULL,
+    SPATIAL INDEX(GeoLocation),
+    FOREIGN KEY (DR_NO) REFERENCES CrimeData(DR_NO) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+INSERT INTO CrimeLocations (DR_NO, GeoLocation)
+SELECT 
+    DR_NO, 
+    ST_PointFromText(CONCAT('POINT(', Lon, ' ', Lat, ')')) 
+FROM 
+    CrimeData;
+
+SELECT CD.DR_NO, CD.Crm_Cd_Desc, ST_AsText(CL.GeoLocation) AS Location
+FROM CrimeLocations as CL, CrimeData AS CD
+WHERE CD.DR_NO = CL.DR_NO AND ST_Distance_Sphere(
+        GeoLocation,
+        ST_GeomFromText('POINT(-118.4100 34.0600)')
+      ) <= 1000; 
